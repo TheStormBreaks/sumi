@@ -1,99 +1,107 @@
+import random
+
 class Node:
     def __init__(self, data):
         self.data = data
         self.left = None
         self.right = None
 
-class BinaryTree:
+class FullBinaryTree:
     def __init__(self):
         self.root = None
 
-    # Insert data into the binary tree
-    def insert(self, data):
-        if self.root is None:
-            self.root = Node(data)
-        else:
-            self._insert(self.root, data)
+    # Construct a full binary tree with random values
+    def construct_full_binary_tree(self, n=10, min_value=1, max_value=100):
+        """Constructs a full binary tree with n nodes."""
+        if n <= 0:
+            return
+        values = [random.randint(min_value, max_value) for _ in range(n)]
+        self.root = self._construct_tree(values, 0)
 
-    def _insert(self, current, data):
-        if data < current.data:
-            if current.left is None:
-                current.left = Node(data)
-            else:
-                self._insert(current.left, data)
-        else:
-            if current.right is None:
-                current.right = Node(data)
-            else:
-                self._insert(current.right, data)
+    def _construct_tree(self, values, index):
+        """Helper function to recursively construct a full binary tree."""
+        if index < len(values):
+            node = Node(values[index])
+            node.left = self._construct_tree(values, 2 * index + 1)
+            node.right = self._construct_tree(values, 2 * index + 2)
+            return node
+        return None
 
-    # In-order Traversal: Left -> Root -> Right
-    def in_order(self, node):
-        if node is not None:
-            self.in_order(node.left)
-            print(node.data, end=" ")
-            self.in_order(node.right)
+    # Find the minimum value in the tree
+    def find_min(self, node):
+        if not node:
+            return float('inf')
+        return min(node.data, self.find_min(node.left), self.find_min(node.right))
+
+    # Find the maximum value in the tree
+    def find_max(self, node):
+        if not node:
+            return float('-inf')
+        return max(node.data, self.find_max(node.left), self.find_max(node.right))
+
+    # Calculate the sum of all elements in the tree
+    def calculate_sum(self, node):
+        if not node:
+            return 0
+        return node.data + self.calculate_sum(node.left) + self.calculate_sum(node.right)
 
     # Pre-order Traversal: Root -> Left -> Right
-    def pre_order(self, node):
-        if node is not None:
-            print(node.data, end=" ")
-            self.pre_order(node.left)
-            self.pre_order(node.right)
+    def pre_order_traversal(self, node):
+        stack = []
+        current = node
+        while stack or current:
+            if current:
+                print(current.data, end=" ")
+                stack.append(current)
+                current = current.left
+            else:
+                current = stack.pop()
+                current = current.right
 
     # Post-order Traversal: Left -> Right -> Root
-    def post_order(self, node):
-        if node is not None:
-            self.post_order(node.left)
-            self.post_order(node.right)
-            print(node.data, end=" ")
-
-    # Level-order Traversal: Level by Level
-    def level_order(self):
-        if not self.root:
-            return
-        queue = [self.root]
-        while queue:
-            current = queue.pop(0)
-            print(current.data, end=" ")
+    def post_order_traversal(self, node):
+        stack1 = []
+        stack2 = []
+        if node:
+            stack1.append(node)
+        while stack1:
+            current = stack1.pop()
+            stack2.append(current)
             if current.left:
-                queue.append(current.left)
+                stack1.append(current.left)
             if current.right:
-                queue.append(current.right)
+                stack1.append(current.right)
+        while stack2:
+            print(stack2.pop().data, end=" ")
 
-    # Branch-wise Traversal: List nodes from root to leaves
-    def branch_order(self, node, path=[]):
-        if node is not None:
-            path.append(node.data)  # Add current node to path
-            if not node.left and not node.right:
-                print(" -> ".join(map(str, path)))  # Print the branch
+    # In-order Traversal: Left -> Root -> Right
+    def in_order_traversal(self, node):
+        stack = []
+        current = node
+        while stack or current:
+            if current:
+                stack.append(current)
+                current = current.left
             else:
-                self.branch_order(node.left, path[:])  # Traverse left
-                self.branch_order(node.right, path[:])  # Traverse right
+                current = stack.pop()
+                print(current.data, end=" ")
+                current = current.right
 
-# Example usage:
-bt = BinaryTree()
-bt.insert(10)
-bt.insert(8)
-bt.insert(4)
-bt.insert(9)
-bt.insert(21)
-bt.insert(19)
-bt.insert(11)
-bt.insert(20)
-bt.insert(31)
-bt.insert(28)
+# Example Usage
+if __name__ == "__main__":
+    # Create a FullBinaryTree instance
+    fbt = FullBinaryTree()
 
+    # Construct the tree with random values
+    fbt.construct_full_binary_tree()
 
-
-
-print("In-order Traversal:")
-bt.in_order(bt.root)
-print("\nPre-order Traversal:")
-bt.pre_order(bt.root)
-print("\nPost-order Traversal:")
-bt.post_order(bt.root)
-print("\nLevel-order Traversal:")
-bt.level_order()
-print("\nBranch-wise Traversal:")
-bt.branch_order(bt.root)
+    # Perform operations
+    print("In-order Traversal:")
+    fbt.in_order_traversal(fbt.root)
+    print("\nPre-order Traversal:")
+    fbt.pre_order_traversal(fbt.root)
+    print("\nPost-order Traversal:")
+    fbt.post_order_traversal(fbt.root)
+    print("\nMinimum Value:", fbt.find_min(fbt.root))
+    print("Maximum Value:", fbt.find_max(fbt.root))
+    print("Sum of All Values:", fbt.calculate_sum(fbt.root))

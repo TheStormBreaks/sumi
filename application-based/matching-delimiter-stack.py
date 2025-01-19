@@ -1,43 +1,40 @@
-class Empty(Exception):
-    pass
-class ArrayStack:
+class Stack:
     def __init__(self):
-        self._data = []
-        
-    def push(self, e):
-        self._data.append(e)
+        self.items = []
     
-    def isEmpty(self):
-        return len(self._data) == 0
-    
-    def __len__(self):
-        return len(self._data)
+    def push(self, item):
+        self.items.append(item)  # O(1)
     
     def pop(self):
-        if self.isEmpty():
-            raise Empty("Stack is Empty")
-        return self._data.pop()
-    def top(self):
-        if self.isEmpty():
-            raise Empty("Stack is Empty")
-        return self._data[-1]
-
-def is_matched(htmlCode):
-    stack = ArrayStack()  # create an instance of ArrayStack
-    j = htmlCode.find("<") 
-    ''' find the index of opening angular bracket, find method of String (str) class returns 
-the index number of occurrence the character sent as an argumnet or returns -1 if character is not present in the string'''
-    while j != -1: 
-        k = htmlCode.find(">", j+1) # find the index of closing angular bracket after opening angular bracket( after j +1 index number)
-        if k!= -1: 
-            tag = htmlCode[j+1:k] # slice the tag (between opening and closing angular brackets)
-            
-            if not tag.startswith("/"): # if tag is an opening tag then push the tag on the top of the stack
-                stack.push(tag)
-            elif stack.pop() != tag[1:]: # if opening on the top of the stack and current closing tags are not matching then return False
-                
-                return False
-        j = htmlCode.find( "<", k+1)  # find next opening bracket
+        if not self.is_empty():
+            return self.items.pop()  # O(1)
+        return None
     
-    return stack.isEmpty() # returns true if stack is empty
-print(is_matched("<HTML> <Body> <P>First HTML Code </P></Body></HTML>"))
+    def peek(self):
+        if not self.is_empty():
+            return self.items[-1]  # O(1)
+        return None
+    
+    def is_empty(self):
+        return len(self.items) == 0  # O(1)
+    
+    def size(self):
+        return len(self.items)  # O(1)
+
+def isit_balanced(string):
+    stack = Stack()
+    matching_pairs = {')': '(', '}': '{', ']': '['}
+    
+    for char in string:
+        if char in "({[":
+            stack.push(char)
+        elif char in ")}]":
+            if stack.is_empty() or stack.pop() != matching_pairs[char]:
+                return False
+    
+    return stack.is_empty()
+
+print(isit_balanced("{[()]}"))  # True
+print(isit_balanced("{[(])}"))  # False
+print(isit_balanced("{{[[(())]]}}"))  # True
+print(isit_balanced(""))  # True
