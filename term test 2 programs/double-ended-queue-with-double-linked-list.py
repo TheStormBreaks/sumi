@@ -41,7 +41,7 @@ class DoubleEndedQueuewithDoubleLinkedList(DoubleLinkedList):
     def first(self):
         if self.is_empty():
             raise Exception("Dequeue is empty")
-        return self.trailer.prev.element
+        return self.header.next.element
     
     def insert_first(self, e):
         self.insert_in_between(e, self.header, self.header.next)
@@ -98,6 +98,7 @@ deque.insert_first(10)
 deque.print_deque()
 deque.insert_first(5)
 deque.print_deque() 
+print(deque.first())
 deque.insert_last(90)
 deque.print_deque()
 deque.insert_last(15) 
