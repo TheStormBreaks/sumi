@@ -32,6 +32,7 @@ class LinkedListStack:
         
     def __len__(self):
         return self._size      # returns the number of elements in the stack
+    
     def push(self, e):
         newNode = self.Node(e, self._head) # creats a new node
         self._head = newNode  # new node is assigned as the head  of the linked list/ stack

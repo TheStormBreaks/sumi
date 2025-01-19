@@ -65,6 +65,10 @@ class SinglyLinkedList:
         self._size=self._size-1
         return answer
     
+    #def delete_at_end(self):
+        #Traverse to second last
+        #second last --> next --> None
+    
 
     def print_second_last(self):
       # Check if the list has fewer than 2 elements
