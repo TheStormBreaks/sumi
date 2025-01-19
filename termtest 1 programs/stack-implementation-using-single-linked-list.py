@@ -27,7 +27,7 @@ class StackWithSinglyLinkedList:
             return
         answer = self._head._element
         self._head = self._head._next
-        self._size = self._size + 1
+        self._size = self._size - 1
 
 
     #S.push() --> l.insert_at_start

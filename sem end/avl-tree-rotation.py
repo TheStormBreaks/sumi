@@ -82,12 +82,12 @@ class AVLTree:
         # Case 3: Left Right
         if balance > 1 and data > root.left.data:
             root.left = self._left_rotate(root.left)
-            return self._right_rotate(root)
+            #return self._right_rotate(root)
 
         # Case 4: Right Left
         if balance < -1 and data < root.right.data:
             root.right = self._right_rotate(root.right)
-            return self._left_rotate(root)
+            #return self._left_rotate(root)
 
         return root
 
